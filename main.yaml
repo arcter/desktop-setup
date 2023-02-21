@@ -1,0 +1,58 @@
+    - name: a play that runs entirely on the ansible host
+      hosts: 127.0.0.1
+      connection: local
+      tasks:
+        - name: Install apt packages and dependencies
+          ansible.builtin.package:
+            name: "{{ item }}"
+            state: present
+          loop:
+            - podman # only available in ubuntu 22.04 and up
+            - i3
+            - zsh
+            - arandr
+            - autorandr
+            - pulseaudio
+            - blueman
+            - openvpn
+            - git
+            - google-chrome-stable
+            - slack
+            - shutter
+            - jq
+            - yq
+            - rofi
+#### ZOOM dependencies
+            - libglib2.0-0
+            - libgstreamer-plugins-base0.10-0 
+            - libxcb-shape0
+            - libxcb-shm0
+            - libxcb-xfixes0
+            - libxcb-randr0
+            - libxcb-image0
+            - libfontconfig1
+            - libgl1-mesa-glx
+            - libxi6
+            - libsm6
+            - libxrender1
+            - libpulse0
+            - libxcomposite1
+            - libxslt1.1
+            - libsqlite3-0
+            - libxcb-keysyms1
+            - libxcb-xtest0
+            - ibus
+        - name: Install deb packages
+          ansible.builtin.apt:
+            deb: "{{ item }}"
+            state: present
+          loop:
+            - https://zoom.us/client/5.13.7.683/zoom_amd64.deb
+            - https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64
+        - name: Setup i3
+          ansible.builtin.copy:
+            src: i3/
+            dest: /home/arcter/.config/
+            owner: arcter
+            group: arcter
+            mode: 0664   
